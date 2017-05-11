@@ -185,9 +185,9 @@
     methods.select = function (options) {
         return this.each(function () {
             if (options.index!==undefined)
-                selectIndex($(this), options.index, false);
+                selectIndex($(this), options.index, true);
             if (options.id)
-                selectId($(this), options.id, false);
+                selectId($(this), options.id, true);
         });
     }
 
@@ -238,7 +238,8 @@
     }
 
     //Private: Select index
-    function selectIndex(obj, index, fire_event = true) {
+    function selectIndex(obj, index, suppress_event) {
+        suppress_event = suppress_event || false;
 
         //Get plugin data
         var pluginData = obj.data('ddslick');
@@ -288,7 +289,7 @@
         adjustSelectedHeight(obj);
 
         //Callback function on selection
-        if (fire_event && typeof settings.onSelected == 'function') {
+        if (!suppress_event && typeof settings.onSelected == 'function') {
             settings.onSelected.call(this, pluginData);
         }
     }
