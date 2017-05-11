@@ -1,6 +1,6 @@
 ﻿//Title: Custom DropDown plugin by PC
 //Documentation: http://designwithpc.com/Plugins/ddslick
-//Author: PC 
+//Author: PC
 //Website: http://designwithpc.com
 //Twitter: http://twitter.com/chaudharyp
 
@@ -56,12 +56,12 @@
                 '.dd-image-right { float:right; margin-right:15px; margin-left:5px;}' +
                 '.dd-container{ position:relative;}​ .dd-selected-text { font-weight:bold}​</style>';
 
-    //Public methods 
+    //Public methods
     methods.init = function (userOptions) {
         //Preserve the original defaults by passing an empty object as the target
         //The object is used to get global flags like embedCSS.
         var options = $.extend({}, defaults, userOptions);
-        
+
         //CSS styles are only added once.
 	    if ($('#css-ddslick').length <= 0 && options.embedCSS) {
 	        $(ddslickCSS).appendTo('head');
@@ -69,10 +69,10 @@
 
         //Apply on all selected elements
         return this.each(function () {
-            //Preserve the original defaults by passing an empty object as the target 
+            //Preserve the original defaults by passing an empty object as the target
             //The object is used to save drop-down's corresponding settings and data.
             var options = $.extend({}, defaults, userOptions);
-            
+
             var obj = $(this),
                 data = obj.data('ddslick');
             //If the plugin has not been initialized yet
@@ -98,7 +98,7 @@
                 else options.data = $.merge(ddSelect, options.data);
 
                 //Replace HTML select with empty placeholder, keep the original
-                var original = obj, placeholder = $('<div').attr('id', obj.attr('id') + '-dd-placeholder');
+                var original = obj, placeholder = $('<div />').attr('id', obj.attr('id'));
                 obj.replaceWith(placeholder);
                 obj = placeholder;
 
@@ -185,9 +185,9 @@
     methods.select = function (options) {
         return this.each(function () {
             if (options.index!==undefined)
-                selectIndex($(this), options.index);
+                selectIndex($(this), options.index, false);
             if (options.id)
-                selectId($(this), options.id);
+                selectId($(this), options.id, false);
         });
     }
 
@@ -228,17 +228,17 @@
             }
         });
     }
-    
+
      //Private: Select id
     function selectId(obj, id) {
-    
+
        var index = obj.find(".dd-option-value[value= '" + id + "']").parents("li").prevAll().length;
        selectIndex(obj, index);
-       
+
     }
 
     //Private: Select index
-    function selectIndex(obj, index) {
+    function selectIndex(obj, index, fire_event = true) {
 
         //Get plugin data
         var pluginData = obj.data('ddslick');
@@ -288,7 +288,7 @@
         adjustSelectedHeight(obj);
 
         //Callback function on selection
-        if (typeof settings.onSelected == 'function') {
+        if (fire_event && typeof settings.onSelected == 'function') {
             settings.onSelected.call(this, pluginData);
         }
     }
